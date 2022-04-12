@@ -17,8 +17,8 @@ import com.anhpham.domain.model.Photo
 import com.anhpham.photofetcher.presentation.PhotoApplication
 import com.anhpham.photofetcher.presentation.ui.photo.PhotoParamType
 import com.anhpham.photofetcher.presentation.ui.photo.PhotoScreen
-import com.anhpham.photofetcher.presentation.ui.photogrid.FlickrPhotosScreen
-import com.anhpham.photofetcher.presentation.ui.photogrid.PicsumPhotosScreen
+import com.anhpham.photofetcher.presentation.ui.photogrid.flickr.FlickrPhotosScreen
+import com.anhpham.photofetcher.presentation.ui.photogrid.picsum.PicsumPhotosScreen
 import com.google.gson.Gson
 
 

@@ -2,7 +2,11 @@ package com.anhpham.photofetcher.presentation
 
 import android.app.Application
 import android.util.Log
+import com.anhpham.photofetcher.framework.appModule
 import com.anhpham.photofetcher.presentation.util.LogWriter
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
 import kotlin.system.exitProcess
 
 class PhotoApplication : Application() {
@@ -15,6 +19,12 @@ class PhotoApplication : Application() {
 
         Thread.setDefaultUncaughtExceptionHandler { thread: Thread?, e: Throwable? ->
             this.handleUncaughtException(thread, e)
+        }
+
+        startKoin {
+            androidLogger()
+            androidContext(this@PhotoApplication)
+            modules(appModule)
         }
     }
 

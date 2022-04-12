@@ -5,20 +5,24 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.anhpham.domain.model.Photo
-import com.anhpham.domain.repository.PhotoRepository
+import com.anhpham.domain.usecase.FetchPhotosUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class PhotosViewModel(private val repo: PhotoRepository) : ViewModel() {
+abstract class BasePhotosViewModel(private val fetchPhoto: FetchPhotosUseCase) : ViewModel() {
     private val _photoList = MutableLiveData<ArrayList<Photo>>()
     val photos: LiveData<ArrayList<Photo>> = _photoList
 
     private var tempPhotos = ArrayList<Photo>()
     private var currentPage = 0
 
+    init {
+        fetchPhotos()
+    }
+
     fun fetchPhotos() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             currentPage = 0
             tempPhotos.clear()
             requestPhotos()
@@ -26,16 +30,17 @@ class PhotosViewModel(private val repo: PhotoRepository) : ViewModel() {
     }
 
     fun loadMore() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             requestPhotos()
         }
     }
 
     private suspend fun requestPhotos() {
-        withContext(Dispatchers.IO) {
-            currentPage++
-            val photos = repo.fetchPhotos(page = currentPage, perPage = ITEMS_PER_PAGE)
-            tempPhotos.addAll(photos)
+        currentPage++
+        val photos = fetchPhoto(page = currentPage, perPage = ITEMS_PER_PAGE)
+        tempPhotos.addAll(photos)
+
+        withContext(Dispatchers.Main) {
             _photoList.postValue(tempPhotos)
         }
     }
