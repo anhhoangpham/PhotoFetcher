@@ -19,26 +19,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
-import com.anhpham.data.repository.PhotosRepositoryImpl
 import com.anhpham.domain.model.Photo
-import com.anhpham.photofetcher.framework.flickr.FlickrDataSource
-import com.anhpham.photofetcher.framework.picsum.PicsumDataSource
-
-@Composable
-fun FlickrPhotosScreen(onPhotoSelected: (Photo) -> Unit) {
-    BaseAllPhotosScreen(
-        onPhotoSelected = onPhotoSelected,
-        viewModel = PhotosViewModel(PhotosRepositoryImpl(FlickrDataSource()))
-    )
-}
-
-@Composable
-fun PicsumPhotosScreen(onPhotoSelected: (Photo) -> Unit) {
-    BaseAllPhotosScreen(
-        onPhotoSelected = onPhotoSelected,
-        viewModel = PhotosViewModel(PhotosRepositoryImpl(PicsumDataSource()))
-    )
-}
 
 @OptIn(
     ExperimentalFoundationApi::class,
@@ -47,11 +28,9 @@ fun PicsumPhotosScreen(onPhotoSelected: (Photo) -> Unit) {
 @Composable
 fun BaseAllPhotosScreen(
     onPhotoSelected: (Photo) -> Unit,
-    viewModel: PhotosViewModel
+    viewModel: BasePhotosViewModel
 ) {
     val photos = viewModel.photos.observeAsState()
-    viewModel.fetchPhotos()
-
     LazyVerticalGrid(
         cells = GridCells.Adaptive(125.dp),
         contentPadding = PaddingValues(top = 10.dp, bottom = 10.dp),
